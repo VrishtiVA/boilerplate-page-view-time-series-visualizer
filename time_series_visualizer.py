@@ -21,8 +21,8 @@ df = df[
 ]
 
 def draw_line_plot():
-    # Draw line plot
 
+    # Draw line plot
     fig = plt.figure(figsize=(16,5))
     plt.title("Daily freeCodeCamp Forum Page Views 5/2016-12/2019")
     plt.xlabel("Date")
@@ -35,11 +35,11 @@ def draw_line_plot():
     return fig
 
 def draw_bar_plot():
+    
     # Copy and modify data for monthly bar plot
     df_bar = df.copy()
     df_bar['Years'] = df_bar.index.year
     df_bar['Months'] = df_bar.index.strftime('%B')
-    print(df_bar.head(), df_bar.dtypes)
 
     # Draw bar plot
     fig = plt.figure(figsize = (8,7), dpi = 300)
@@ -62,8 +62,6 @@ def draw_bar_plot():
 
 def draw_box_plot():
 
-    #Working on fixing this one
-
     # Prepare data for box plots (this part is done!)
     df_box = df.copy()
     df_box.reset_index(inplace = True)
@@ -76,28 +74,28 @@ def draw_box_plot():
 
     sns.boxplot(
         data = df_box, x = 'year', y = 'value', ax = axs[0],
-        hue = 'year', palette = 'tab10',
-        #fliersize = 2, flierprops = dict(marker='d')
+        #hue = 'year', palette = 'tab10',
+        fliersize = 2, #flierprops = dict(marker='d')
     )
     
     sns.boxplot(
         data = df_box, x = 'month', y = 'value' , ax = axs[1],
-        order = months, hue_order = months, hue = 'month',
-        #fliersize = 2, flierprops = dict(marker='d')
+        order = months, hue_order = months, #hue = 'month',
+        fliersize = 2, #flierprops = dict(marker='d')
     )
 
     axs[0].set_title("Year-wise Box Plot (Trend)")
     axs[0].set_xlabel("Year")
+    axs[0].legend().remove()
 
     axs[1].set_title("Month-wise Box Plot (Seasonality)")
     axs[1].set_xlabel("Month")
-
-    plt.tight_layout()
+    axs[1].legend().remove()
 
     plt.setp( 
         axs, 
         ylabel="Page Views", 
-        ylim=(0,200000), yticks=[i for i in range(0, 200001, 20000)]
+        ylim=(0,200000), yticks=[i for i in range(0, 200001, 20000)],
     )
 
     # Save image and return fig (don't change this part)
