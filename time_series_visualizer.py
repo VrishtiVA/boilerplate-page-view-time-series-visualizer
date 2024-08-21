@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
-import numpy as np
+#import numpy as np
 import pandas as pd
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
+#The modules seem to be out of date.
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
 df = pd.read_csv(
@@ -38,19 +39,20 @@ def draw_bar_plot():
     df_bar = df.copy()
     df_bar['Years'] = df_bar.index.year
     df_bar['Months'] = df_bar.index.strftime('%B')
+    print(df_bar.head(), df_bar.dtypes)
 
     # Draw bar plot
     fig = plt.figure(figsize = (8,7), dpi = 300)
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
     sns.barplot(
-        df_bar, x = 'Years', y = 'value',
-        estimator = np.mean, 
-        width = 0.5,
+        data = df_bar, x = 'Years', y = 'value',
         hue = 'Months', hue_order = months,
-        errorbar = None, palette = "tab10",
+        #estimator = np.mean, 
+        ci = None, palette = "tab10",
     )
 
+    plt.legend(loc='upper left')
     plt.xticks(rotation = 90)
     plt.ylabel("Average Page Views")
 
@@ -59,6 +61,9 @@ def draw_bar_plot():
     return fig
 
 def draw_box_plot():
+
+    #Working on fixing this one
+
     # Prepare data for box plots (this part is done!)
     df_box = df.copy()
     df_box.reset_index(inplace = True)
@@ -70,14 +75,15 @@ def draw_box_plot():
     months=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
     sns.boxplot(
-        df_box, x = 'year', y = 'value', ax = axs[0], legend = False,
+        data = df_box, x = 'year', y = 'value', ax = axs[0],
         hue = 'year', palette = 'tab10',
-        fliersize = 2, flierprops = dict(marker='d')
+        #fliersize = 2, flierprops = dict(marker='d')
     )
+    
     sns.boxplot(
-        df_box, x = 'month', y = 'value' , ax = axs[1], legend = False,
+        data = df_box, x = 'month', y = 'value' , ax = axs[1],
         order = months, hue_order = months, hue = 'month',
-        fliersize = 2, flierprops = dict(marker='d')
+        #fliersize = 2, flierprops = dict(marker='d')
     )
 
     axs[0].set_title("Year-wise Box Plot (Trend)")
@@ -86,9 +92,12 @@ def draw_box_plot():
     axs[1].set_title("Month-wise Box Plot (Seasonality)")
     axs[1].set_xlabel("Month")
 
-    plt.setp( axs, 
+    plt.tight_layout()
+
+    plt.setp( 
+        axs, 
         ylabel="Page Views", 
-        ylim=(0,200000), yticks=np.arange(0,200001,20000)
+        ylim=(0,200000), yticks=[i for i in range(0, 200001, 20000)]
     )
 
     # Save image and return fig (don't change this part)
